@@ -14,6 +14,7 @@ namespace Processes_Monitor
         [STAThread]
         static void Main()
         {
+            var process = ProcessesStateInfo.RefreshProcessStateInfo();
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new Form1());

@@ -23,15 +23,19 @@ namespace Processes_Monitor
         }
         /// <summary>
         /// 初始化进程信息方法，由于利用了WMI查询，可能会有一些效率问题，目前还未找到其他好方法。
-        /// 解决方案可以考虑使用多线程，一边加载一边显示，或者第一屏不显示加载的进程而显示其他信息来减缓效率问题导致的使用延迟问题。
+        /// 解决方案可以考虑使用多线程，一边加载一边显示，或者第一屏不显示加载的进程而显示其他信息来减缓效率问题导致的使用延迟问题。【已解决】
+        /// 2015-04-16 优化了调用算法，效率提升90%。
         /// </summary>
-        /// <returns>返回一个Dictionary对象.</returns>
+        /// <returns>返回一个Dictionary对象.Key为Process Id，Value 为ProcessInfo对象</returns>
         static private Dictionary<int, ProcessInfo> GetProcessesStateInfo()
         {
             processes = new Dictionary<int, ProcessInfo>();
-            foreach (Process process in Process.GetProcesses())
+
+            var searcher = new ManagementObjectSearcher("Select ProcessId,Name, ExecutablePath,Caption From Win32_Process");
+            var processDataCache = searcher.Get();
+            foreach (ManagementObject processObj in processDataCache)
             {
-                processes.Add(process.Id, new ProcessInfo(process));
+                processes.Add(Convert.ToInt32(processObj["ProcessId"]), new ProcessInfo(processObj));
             }
             return processes;
         }
@@ -40,7 +44,7 @@ namespace Processes_Monitor
         /// 进程状态刷新方法。
         /// 此方法会删除已经死掉的进程，添加新增加进程信息，刷新已经存在的进程的CPU和内存占用。
         /// </summary>
-        /// <returns></returns>
+        /// <returns>返回一个Dictionary对象.Key为Process Id，Value 为ProcessInfo对象</returns>
         static public Dictionary<int, ProcessInfo> RefreshProcessStateInfo()
         {
             if (processes == null || processes.Count == 0)
@@ -99,6 +103,10 @@ namespace Processes_Monitor
             }
             public string Discription { get { return this.mDiscription; } }
 
+            /// <summary>
+            /// 添加单个process 信息专用构造方法。
+            /// </summary>
+            /// <param name="process"></param>
             public ProcessInfo(Process process)
             {
                 this.mId = process.Id;
@@ -111,8 +119,29 @@ namespace Processes_Monitor
                     this.mDiscription = (String)processDataObj["Caption"];
                     this.mUser = GetProcessOwner(processDataObj);
                 }
-                this.mCpuOccupancyRate = GetCpuOccupancyRateByProcess(process);
-                this.mMemoryOccupancy = GetMemoryOccupancyRateByProcess(process);
+                this.mCpuOccupancyRate = GetCpuOccupancyRateByProcess(mName);
+                this.mMemoryOccupancy = GetMemoryOccupancyRateByProcess(mName);
+            }
+            /// <summary>
+            /// 2015-04-16 添加了新的构造方法，此方法直接load WMI数据只有一次，执行效率大幅提升。同时原有构造方法保留，专用于更新单个process。
+            /// </summary>
+            /// <param name="processDataObj"></param>
+            public ProcessInfo(ManagementObject processDataObj)
+            {
+                this.mId = Convert.ToInt32(processDataObj["ProcessId"]);
+                this.mName = (String)processDataObj["Name"];
+                try
+                {
+                    this.mLocalPath = (String)processDataObj["ExcutablePath"];
+                }
+                catch (ManagementException managerException) 
+                {
+                    this.mLocalPath = string.Empty;
+                }
+                this.mDiscription = (String)processDataObj["Caption"];
+                this.mUser = GetProcessOwner(processDataObj);
+                this.mCpuOccupancyRate = GetCpuOccupancyRateByProcess(mName);
+                this.mMemoryOccupancy = GetMemoryOccupancyRateByProcess(mName);
             }
             private String GetProcessOwner(ManagementObject processDataObj)
             {
@@ -136,17 +165,17 @@ namespace Processes_Monitor
             }
             public void RefreshProcessInfo(Process process)
             {
-                this.mCpuOccupancyRate = this.GetCpuOccupancyRateByProcess(process);
-                this.mMemoryOccupancy = this.GetMemoryOccupancyRateByProcess(process);
+                this.mCpuOccupancyRate = this.GetCpuOccupancyRateByProcess(process.ProcessName);
+                this.mMemoryOccupancy = this.GetMemoryOccupancyRateByProcess(process.ProcessName);
             }
-            private float GetCpuOccupancyRateByProcess(Process process)
+            private float GetCpuOccupancyRateByProcess(String processName)
             {
-                PerformanceCounter process_cpu = new PerformanceCounter("Process", "% Processor Time", process.ProcessName);
+                PerformanceCounter process_cpu = new PerformanceCounter("Process", "% Processor Time", processName);
                 return process_cpu.NextValue();
             }
-            private float GetMemoryOccupancyRateByProcess(Process process)
+            private float GetMemoryOccupancyRateByProcess(String processName)
             {
-                PerformanceCounter process_memory = new PerformanceCounter("Process", "Working Set - Private", process.ProcessName);
+                PerformanceCounter process_memory = new PerformanceCounter("Process", "Working Set - Private", processName);
                 return process_memory.NextValue();
             }
 
