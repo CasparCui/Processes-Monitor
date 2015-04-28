@@ -86,7 +86,7 @@ namespace Processes_Monitor
             private String mDiscription;
             private ManagementObjectSearcher searcher;
             private ManagementObjectCollection processDataCache;
-
+            public Process Process { get; private set; }
             public int Id { get { return this.mId; } }
             public String Name { get { return this.mName; } }
             public float CpuOccupancyRate
@@ -109,6 +109,7 @@ namespace Processes_Monitor
             /// <param name="process"></param>
             public ProcessInfo(Process process)
             {
+                this.Process = process;
                 this.mId = process.Id;
                 this.mName = process.ProcessName;
                 searcher = new ManagementObjectSearcher("Select ExecutablePath,Caption From Win32_Process Where ProcessID = '" + this.mId + "'");
@@ -134,7 +135,7 @@ namespace Processes_Monitor
                 {
                     this.mLocalPath = (String)processDataObj["ExcutablePath"];
                 }
-                catch (ManagementException managerException) 
+                catch
                 {
                     this.mLocalPath = string.Empty;
                 }
