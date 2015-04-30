@@ -12,6 +12,18 @@ namespace Processes_Monitor
     {
         public List<FileInfo> Files { get; set; }
         public Dictionary<String,Exception> CanNotGetFilesPath { get; set; }
+        private Dictionary<int, Process> occupancyProcesses;
+        public Dictionary<int, Process> OccupancyProcesses
+        {
+            get
+            {
+                if (occupancyProcesses == null)
+                {
+                    occupancyProcesses = this.GetOccupancyProcesses();
+                }
+                return occupancyProcesses;
+            }
+        }
         public FileCollection(List<String> filesPath)
         {
             Files = new List<FileInfo>();
@@ -28,7 +40,7 @@ namespace Processes_Monitor
                 }
             }
         }
-        public Dictionary<int,Process> GetOccupancyProcesses()
+        private Dictionary<int,Process> GetOccupancyProcesses()
         {
             var resultOccupancyProcesses = new Dictionary<int,Process>();
             if(Files.Count>0)
