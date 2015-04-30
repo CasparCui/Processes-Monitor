@@ -101,7 +101,7 @@ namespace Processes_Monitor
 
         #region IDisposable Members
 
-         public void Dispose()
+        public void Dispose()
         {
             System.GC.Collect(0);
         }
