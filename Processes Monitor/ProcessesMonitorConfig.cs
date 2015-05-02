@@ -4,34 +4,63 @@ using System.Xml;
 
 namespace Processes_Monitor
 {
+    public enum FolderPathOption
+    {
+        Source = 0,
+        Destination =1,
+    }
     public class ProcessesMonitorConfig
     {
         static private String destinationFolderPath;
-        private static List<String> filePath;
+        static private String sourceFolderPath;
+        private static List<String> sourceFilePath;
+        private static List<String> destinationFilePath;
 
         private static XmlNode mXmlRootNode;
 
+        static public String SourceFolderPath
+        {
+            get
+            {
+                if(String.IsNullOrEmpty(sourceFolderPath))
+                {
+                    sourceFolderPath = (xmlRootNode.SelectSingleNode("SourcePath") as XmlElement).GetAttribute("FolderPath").ToString();
+                }
+                return sourceFolderPath;
+            }
+        }
         static public String DestinationFolderPath
         {
             get
             {
                 if (String.IsNullOrEmpty(destinationFolderPath))
                 {
-                    destinationFolderPath = (xmlRootNode.SelectSingleNode("destinationPath") as XmlElement).GetAttribute("FolderPath").ToString().Trim('\\');
+                    destinationFolderPath = (xmlRootNode.SelectSingleNode("DestinationPath") as XmlElement).GetAttribute("FolderPath").ToString().Trim('\\');
                 }
                 return destinationFolderPath;
             }
         }
 
-        public static List<String> FilePath
+        public static List<String> SourceFilePath
         {
             get
             {
-                if (filePath == null)
+                if (sourceFilePath == null)
                 {
-                    filePath = GetFilesPathFromXML();
+                    sourceFilePath = GetFilesPathFromXML(FolderPathOption.Source);
                 }
-                return filePath;
+                return sourceFilePath;
+            }
+        }
+        public static List<String> DestinationFilePath
+        {
+            get
+            {
+                if(destinationFilePath == null)
+                {
+                    destinationFilePath = GetFilesPathFromXML(FolderPathOption.Destination);
+                }
+                return destinationFilePath;
             }
         }
         private static XmlNode xmlRootNode
@@ -52,14 +81,26 @@ namespace Processes_Monitor
             }
         }
 
-        static public List<String> GetFilesPathFromXML()
+        static public List<String> GetFilesPathFromXML(FolderPathOption folder)
         {
             var tempPathList = new List<String>();
-            var filesNode = xmlRootNode.SelectSingleNode("SourceFiles");
+            var folderPath = String.Empty;
+            switch(folder)
+            {
+                case FolderPathOption.Source:
+                    folderPath = SourceFolderPath;
+                    break;
+                case FolderPathOption.Destination:
+                    folderPath = DestinationFolderPath;
+                    break;
+                default:
+                    throw new Exception("Error Input At Function GetFilesPathFormXml.");
+            }
+            var filesNode = xmlRootNode.SelectSingleNode("Files");
             var fileNameNodes = filesNode.SelectNodes("File");
             foreach (XmlNode node in fileNameNodes)
             {
-                tempPathList.Add((filesNode as XmlElement).GetAttribute("FilePath").ToString().Trim('\\') + "\\" + (node as XmlElement).GetAttribute("FileName").Trim('\\'));
+                tempPathList.Add(folderPath.Trim('\\') + "\\" + (node as XmlElement).GetAttribute("FileName").Trim('\\'));
             }
             return tempPathList;
         }
