@@ -8,6 +8,7 @@ namespace Processes_Monitor
     internal class FileCollection
     {
         private Dictionary<int, Process> occupancyProcesses;
+        private Dictionary<int, ServiceStateInfo.ServiceInfo> occupancyService;
 
         public FileCollection(List<String> filesPath)
         {
@@ -38,6 +39,22 @@ namespace Processes_Monitor
                     occupancyProcesses = this.GetOccupancyProcesses();
                 }
                 return occupancyProcesses;
+            }
+        }
+        public Dictionary<int, ServiceStateInfo.ServiceInfo> OccupancyServices
+        {
+            get
+            {
+                if (occupancyProcesses == null)
+                {
+                    occupancyProcesses = this.GetOccupancyProcesses();
+                }
+                if (occupancyService == null)
+                {
+                    occupancyService = this.GetOccupancyServices();
+                }
+                return occupancyService;
+
             }
         }
         private List<int> GetOccupancyProceeseId(String fileName)
@@ -89,6 +106,23 @@ namespace Processes_Monitor
                 }
             }
             return resultOccupancyProcesses;
+        }
+        private Dictionary<int, ServiceStateInfo.ServiceInfo> GetOccupancyServices()
+        {
+            var resultOccupancyServices = new Dictionary<int, ServiceStateInfo.ServiceInfo>();
+            if (this.occupancyProcesses != null && this.occupancyProcesses.Count >= 0)
+            {
+                var services = ServiceStateInfo.WindowsService;
+                foreach (var process in occupancyProcesses)
+                    foreach (var service in services)
+                    {
+                        if (process.Value.Id == service.Value.ProcessID)
+                        {
+                            resultOccupancyServices.Add(process.Value.Id, service.Value);
+                        }
+                    }
+            }
+            return resultOccupancyServices;
         }
     }
 }
