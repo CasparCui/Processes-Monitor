@@ -5,7 +5,7 @@ using System.IO;
 
 namespace Processes_Monitor
 {
-    internal class FileCollection
+    public class FileCollection
     {
         private Dictionary<int, Process> occupancyProcesses;
         private Dictionary<int, ServiceStateInfo.ServiceInfo> occupancyService;
