@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Xml;
 
 namespace Processes_Monitor
@@ -108,6 +109,10 @@ namespace Processes_Monitor
             var fileNameNodes = filesNode.SelectNodes("File");
             foreach (XmlNode node in fileNameNodes)
             {
+                if(folder == FolderPathOption.Source && String.IsNullOrEmpty((node as XmlElement).GetAttribute("FolderPath")))
+                {
+                    folderPath = (node as XmlElement).GetAttribute("FolderPath");
+                }
                 tempPathList.Add(folderPath.Trim('\\') + "\\" + (node as XmlElement).GetAttribute("FileName").Trim('\\'));
             }
             return tempPathList;
@@ -122,6 +127,22 @@ namespace Processes_Monitor
         {
             (xmlRootNode.SelectSingleNode("DestinationPath") as XmlElement).SetAttribute("FolderPath", path);
             return path;
+        }
+        static public void AddFileNodeIntoXML(List<FileInfo> files)
+        {
+            foreach(var file in files)
+            {
+                var fileName = file.Name;
+                var folderName = file.DirectoryName;
+                var filesNode = xmlRootNode.SelectSingleNode("Files");
+                var fileNode = xmlRootNode.OwnerDocument.CreateElement("File");
+                fileNode.SetAttribute("FileName", fileName);
+                if(!folderName.Equals(SourceFolderPath,StringComparison.OrdinalIgnoreCase))
+                {
+                    fileNode.SetAttribute("FolderPath", folderName);
+                }
+                filesNode.AppendChild(fileNode as XmlNode);
+            }
         }
     }
 }
