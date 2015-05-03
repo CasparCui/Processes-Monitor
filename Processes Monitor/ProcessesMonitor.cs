@@ -10,9 +10,9 @@ using System.Windows.Forms;
 
 namespace Processes_Monitor
 {
-    public partial class Form1 : Form
+    public partial class ProcessesMonitor : Form
     {
-        public Form1()
+        public ProcessesMonitor()
         {
             InitializeComponent();
         }

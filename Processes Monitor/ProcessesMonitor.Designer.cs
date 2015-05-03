@@ -1,6 +1,6 @@
 ﻿namespace Processes_Monitor
 {
-    partial class Form1
+    partial class ProcessesMonitor
     {
         /// <summary>
         /// Required designer variable.

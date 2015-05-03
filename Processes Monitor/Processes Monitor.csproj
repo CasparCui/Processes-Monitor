@@ -48,11 +48,11 @@
   <ItemGroup>
     <Compile Include="FileCollection.cs" />
     <Compile Include="FileControl.cs" />
-    <Compile Include="Form1.cs">
+    <Compile Include="ProcessesMonitor.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="ProcessesMonitor.Designer.cs">
+      <DependentUpon>ProcessesMonitor.cs</DependentUpon>
     </Compile>
     <Compile Include="Monitor.cs">
       <SubType>UserControl</SubType>

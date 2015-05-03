@@ -28,6 +28,10 @@ namespace Processes_Monitor
                 }
                 return sourceFolderPath;
             }
+            set
+            {
+                sourceFolderPath = SetSourceFolderPath(value);
+            }
         }
         static public String DestinationFolderPath
         {
@@ -38,6 +42,10 @@ namespace Processes_Monitor
                     destinationFolderPath = (xmlRootNode.SelectSingleNode("DestinationPath") as XmlElement).GetAttribute("FolderPath").ToString().Trim('\\');
                 }
                 return destinationFolderPath;
+            }
+            set
+            {
+                destinationFolderPath = SetDestinationFolderPath(value);
             }
         }
 
@@ -81,7 +89,7 @@ namespace Processes_Monitor
             }
         }
 
-        static public List<String> GetFilesPathFromXML(FolderPathOption folder)
+        static private List<String> GetFilesPathFromXML(FolderPathOption folder)
         {
             var tempPathList = new List<String>();
             var folderPath = String.Empty;
@@ -103,6 +111,17 @@ namespace Processes_Monitor
                 tempPathList.Add(folderPath.Trim('\\') + "\\" + (node as XmlElement).GetAttribute("FileName").Trim('\\'));
             }
             return tempPathList;
+        }
+
+        static private String SetSourceFolderPath(String path)
+        {
+            (xmlRootNode.SelectSingleNode("SourcePath") as XmlElement).SetAttribute("FolderPath", path);
+            return path;
+        }
+        static private String SetDestinationFolderPath(String path)
+        {
+            (xmlRootNode.SelectSingleNode("DestinationPath") as XmlElement).SetAttribute("FolderPath", path);
+            return path;
         }
     }
 }
