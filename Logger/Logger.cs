@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.IO;
+using System.Text;
 
 namespace ProcessLogger
 {
@@ -13,11 +11,16 @@ namespace ProcessLogger
         Debug = 2,
         Info = 4,
     }
+
     public class Logger
     {
-        private Logger() { }
+        private Logger()
+        {
+        }
+
         private static String outputPath = @"C:\logFile.txt";
         private static StreamWriter sWriter = null;
+
         public static void SetOutputPath(String path)
         {
             outputPath = path;
@@ -27,8 +30,8 @@ namespace ProcessLogger
         {
             using (File.Create(outputPath)) { }
             return outputPath;
-
         }
+
         private static StreamWriter GetStreamForWriteLog()
         {
             if (sWriter == null)
@@ -40,6 +43,7 @@ namespace ProcessLogger
                 return sWriter;
             }
         }
+
         private static void WriteLog(LogLevel level, String formatStr, params object[] args)
         {
             try
@@ -69,14 +73,17 @@ namespace ProcessLogger
         {
             WriteLog(LogLevel.Error, formatStr, args);
         }
+
         public static void Warning(string formatStr, params object[] args)
         {
             WriteLog(LogLevel.Warning, formatStr, args);
         }
+
         public static void Debug(string formatStr, params object[] args)
         {
             WriteLog(LogLevel.Debug, formatStr, args);
         }
+
         public static void Info(string formatStr, params object[] args)
         {
             WriteLog(LogLevel.Info, formatStr, args);

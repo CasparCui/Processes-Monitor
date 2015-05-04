@@ -4,7 +4,6 @@ using System.Management;
 
 namespace Processes_Monitor
 {
-    
     public enum ServiceRunningState
     {
         Stopped = 1,
@@ -16,6 +15,7 @@ namespace Processes_Monitor
         Paused = 7,
         Unknown = 8,
     }
+
     /// <summary>
     /// 此类需要重写
     /// </summary>
@@ -46,18 +46,18 @@ namespace Processes_Monitor
             return windowsService;
         }
 
-
         public class ServiceInfo
         {
             private String mDescription;
             private String mName;
             private uint? mProcessId;
             private ServiceRunningState mServiceState;
+
             public ServiceInfo(ManagementObject serviceObj)
             {
                 this.mName = (String)serviceObj["Name"];
                 this.mDescription = (String)serviceObj["Description"];
-                this.mServiceState = (ServiceRunningState)Enum.Parse(typeof(ServiceRunningState), ((String)serviceObj["State"]).Replace(' ','_'));
+                this.mServiceState = (ServiceRunningState)Enum.Parse(typeof(ServiceRunningState), ((String)serviceObj["State"]).Replace(' ', '_'));
                 if (serviceObj["ProcessId"] != null)
                 {
                     this.mProcessId = (uint)serviceObj["ProcessId"];
@@ -67,9 +67,11 @@ namespace Processes_Monitor
                     mProcessId = null;
                 }
             }
+
             public String Description { get { return this.mDescription; } }
 
             public String Name { get { return this.mName; } }
+
             public uint? ProcessID { get { return this.mProcessId; } }
 
             public ServiceRunningState ServiceState { get { return this.mServiceState; } set { this.mServiceState = value; } }

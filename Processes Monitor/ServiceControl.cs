@@ -16,10 +16,12 @@ namespace Processes_Monitor
         static public ServiceController Controller { get; private set; }
 
         static public Exception ServiceException { get; private set; }
+
         static public bool ControlService(Processes_Monitor.ServiceStateInfo.ServiceInfo serviceInfo, ServiceControlOption controlOption)
         {
             return ControlService(serviceInfo.Name, controlOption);
         }
+
         static public bool ControlService(String name, ServiceControlOption controlOption)
         {
             Controller = new ServiceController(name);
@@ -50,6 +52,7 @@ namespace Processes_Monitor
             serviceControlThread.Abort();
             return result;
         }
+
         static private bool RestartService()
         {
             if (StopService())
@@ -76,10 +79,10 @@ namespace Processes_Monitor
                     ServiceException = e;
                     return false;
                 }
-                do 
+                do
                 {
                     Controller.Refresh();
-                    Thread.Sleep(333); 
+                    Thread.Sleep(333);
                 }
                 while (Controller.Status != ServiceControllerStatus.Running);
                 return true;
@@ -112,6 +115,7 @@ namespace Processes_Monitor
             ServiceException = new Exception("Service Can not stop now!");
             return false;
         }
+
         #region IDisposable Members
 
         public void Dispose()

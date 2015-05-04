@@ -1,20 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.IO;
 using System.Diagnostics;
+using System.IO;
 
 namespace Processes_Monitor
 {
     public class FileControl
     {
         public FileCollection FileCollection { get; private set; }
+
         private String destinationFolderPath;
         private ProcessControl processControler;
         private bool IsDestinationFiles;
+
         public List<Exception> FileControlException { get; private set; }
+
         public FileControl(FileCollection files)
         {
             this.FileCollection = files;
@@ -33,6 +33,7 @@ namespace Processes_Monitor
                 }
             }
         }
+
         public bool StopFileOccupanciedProcesses()
         {
             if (IsDestinationFiles)
@@ -44,11 +45,10 @@ namespace Processes_Monitor
                     {
                         if (process is Process)
                         {
-                            if(!processControler.KillProcess(process))
+                            if (!processControler.KillProcess(process))
                             {
                                 FileControlException.Add(processControler.ProcessException);
                             }
-
                         }
                     }
                     return true;
@@ -57,49 +57,49 @@ namespace Processes_Monitor
                 {
                     FileControlException.Add(e);
                 }
-                
             }
             return false;
         }
 
         public bool RestartStopedService()
         {
-            if(IsDestinationFiles)
+            if (IsDestinationFiles)
             {
                 try
                 {
                     var services = FileCollection.OccupancyServices;
-                    foreach( var service in services.Values)
+                    foreach (var service in services.Values)
                     {
-                        if(service is ServiceStateInfo.ServiceInfo)
+                        if (service is ServiceStateInfo.ServiceInfo)
                         {
                             ServiceControl.ControlService(service, ServiceControlOption.Start);
                         }
                     }
                     return true;
                 }
-                catch(Exception e)
+                catch (Exception e)
                 {
                     FileControlException.Add(e);
                 }
             }
             return false;
         }
+
         public bool CopyToDestinationFolder(bool OccupanciedProcessesHaveBeenKilled)
         {
-            if(OccupanciedProcessesHaveBeenKilled && !this.IsDestinationFiles)
+            if (OccupanciedProcessesHaveBeenKilled && !this.IsDestinationFiles)
             {
-                foreach(var fileInfo in FileCollection.Files)
+                foreach (var fileInfo in FileCollection.Files)
                 {
                     try
                     {
-                        fileInfo.CopyTo(this.destinationFolderPath,true);
+                        fileInfo.CopyTo(this.destinationFolderPath, true);
                     }
                     catch (IOException ioException)
                     {
                         this.FileControlException.Add(ioException);
                     }
-                    catch(Exception e)
+                    catch (Exception e)
                     {
                         this.FileControlException.Add(e);
                     }
@@ -108,6 +108,5 @@ namespace Processes_Monitor
             }
             return false;
         }
-
     }
 }

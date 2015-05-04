@@ -30,6 +30,7 @@ namespace Processes_Monitor
         public Dictionary<String, Exception> CanNotGetFilesPath { get; set; }
 
         public List<FileInfo> Files { get; set; }
+
         public Dictionary<int, Process> OccupancyProcesses
         {
             get
@@ -41,6 +42,7 @@ namespace Processes_Monitor
                 return occupancyProcesses;
             }
         }
+
         public Dictionary<int, ServiceStateInfo.ServiceInfo> OccupancyServices
         {
             get
@@ -54,9 +56,9 @@ namespace Processes_Monitor
                     occupancyService = this.GetOccupancyServices();
                 }
                 return occupancyService;
-
             }
         }
+
         private List<int> GetOccupancyProceeseId(String fileName)
         {
             var processesId = new List<int>();
@@ -107,6 +109,7 @@ namespace Processes_Monitor
             }
             return resultOccupancyProcesses;
         }
+
         private Dictionary<int, ServiceStateInfo.ServiceInfo> GetOccupancyServices()
         {
             var resultOccupancyServices = new Dictionary<int, ServiceStateInfo.ServiceInfo>();

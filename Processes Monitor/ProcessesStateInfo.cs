@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Management;
 
 namespace Processes_Monitor
@@ -47,14 +46,14 @@ namespace Processes_Monitor
                     processes.Add(systemProcess.Id, new ProcessInfo(systemProcess));
                 }
             }
-            foreach(var process in processes)
+            foreach (var process in processes)
             {
-                if(!systemProcessesDictionary.ContainsKey(process.Key))
+                if (!systemProcessesDictionary.ContainsKey(process.Key))
                 {
                     needDeleteKey.Add(process.Key);
                 }
             }
-            foreach(var key in needDeleteKey)
+            foreach (var key in needDeleteKey)
             {
                 processes.Remove(key);
             }
@@ -79,6 +78,7 @@ namespace Processes_Monitor
             }
             return processes;
         }
+
         public class ProcessInfo
         {
             private float mCpuOccupancyRate;
@@ -90,6 +90,7 @@ namespace Processes_Monitor
             private String mUser;
             private ManagementObjectCollection processDataCache;
             private ManagementObjectSearcher searcher;
+
             /// <summary>
             /// 添加单个process 信息专用构造方法。
             /// </summary>
@@ -154,7 +155,9 @@ namespace Processes_Monitor
             public String Name { get { return this.mName; } }
 
             public Process Process { get; private set; }
+
             public String User { get { return this.mUser; } }
+
             public void RefreshProcessInfo(Process process)
             {
                 this.mCpuOccupancyRate = this.GetCpuOccupancyRateByProcess(process.ProcessName);
@@ -180,7 +183,7 @@ namespace Processes_Monitor
                 PerformanceCounter process_memory = new PerformanceCounter("Process", "Working Set - Private", processName);
                 try
                 {
-                    return process_memory.NextValue()/(1024*1024);
+                    return process_memory.NextValue() / (1024 * 1024);
                 }
                 catch
                 {
