@@ -161,7 +161,7 @@ namespace Processes_Monitor
 
             public String LocalPath { get { return this.mLocalPath; } }
 
-            public float MomoryOccupancy
+            public float MemoryOccupancy
             {
                 get { return this.mMemoryOccupancy; }
                 set { this.mMemoryOccupancy = value; }
@@ -223,6 +223,12 @@ namespace Processes_Monitor
                 {
                     return "SYSTEM";
                 }
+            }
+
+            public float RefreshProcessMemory()
+            {
+                this.MemoryOccupancy = this.GetMemoryOccupancyRateByProcess(this.Name);
+                return this.MemoryOccupancy;
             }
         }
     }

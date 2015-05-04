@@ -46,6 +46,7 @@ namespace Processes_Monitor
             return windowsService;
         }
 
+
         public class ServiceInfo
         {
             private String mDescription;
@@ -66,7 +67,6 @@ namespace Processes_Monitor
                     mProcessId = null;
                 }
             }
-
             public String Description { get { return this.mDescription; } }
 
             public String Name { get { return this.mName; } }

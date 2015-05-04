@@ -40,7 +40,7 @@ namespace Processes_Monitor
                     process.Id.ToString(), 
                     process.User, 
                     process.CpuOccupancyRate.ToString(),//暂时不work，原因不明。 
-                    process.MomoryOccupancy.ToString("#0.00")+"MB", 
+                    process.MemoryOccupancy.ToString("#0.00")+"MB", 
                     process.LocalPath 
                 });
                 listViewItem.Name = process.Id.ToString();
@@ -107,7 +107,7 @@ namespace Processes_Monitor
                     if (processes.ContainsKey(Convert.ToInt32(item.SubItems[1].Text/*PID*/)))
                     {
                         item.SubItems[3].Text = processes[Convert.ToInt32(item.SubItems[1].Text)].CpuOccupancyRate.ToString();
-                        item.SubItems[4].Text = processes[Convert.ToInt32(item.SubItems[1].Text)].MomoryOccupancy.ToString("#0.00") + "MB";
+                        item.SubItems[4].Text = processes[Convert.ToInt32(item.SubItems[1].Text)].MemoryOccupancy.ToString("#0.00") + "MB";
                     }
                     else
                     {
@@ -124,7 +124,7 @@ namespace Processes_Monitor
                             process.Id.ToString(), 
                             process.User, 
                             process.CpuOccupancyRate.ToString(),//暂时不work，原因不明。 
-                            process.MomoryOccupancy.ToString("#0.00")+"MB", 
+                            process.MemoryOccupancy.ToString("#0.00")+"MB", 
                             process.LocalPath 
                         })
                         {
