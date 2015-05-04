@@ -26,7 +26,7 @@ namespace Processes_Monitor
         static private Dictionary<String, ServiceInfo> windowsService;
         static private String wmiSql = "Select Name, Description,State ,ProcessId From Win32_Service";
 
-        static public Dictionary<String, ServiceInfo> WindowsService
+        static public Dictionary<String, ServiceInfo> WindowsServices
         {
             get
             {

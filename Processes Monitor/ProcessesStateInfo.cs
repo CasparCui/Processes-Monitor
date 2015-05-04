@@ -6,7 +6,7 @@ using System.Management;
 
 namespace Processes_Monitor
 {
-    internal class ProcessesStateInfo
+    public class ProcessesStateInfo
     {
         static private Dictionary<int, ProcessInfo> processes;
 
@@ -26,16 +26,17 @@ namespace Processes_Monitor
         /// 此方法会删除已经死掉的进程，添加新增加进程信息，刷新已经存在的进程的CPU和内存占用。
         /// </summary>
         /// <returns>返回一个Dictionary对象.Key为Process Id，Value 为ProcessInfo对象</returns>
-        static public Dictionary<int, ProcessInfo> RefreshProcessStateInfo()
+        static private Dictionary<int, ProcessInfo> RefreshProcessStateInfo()
         {
             if (processes == null || processes.Count == 0)
             {
                 return GetProcessesStateInfo();
             }
             var systemProcesses = Process.GetProcesses();
-            var needDeleteProcessIdCollection = processes.Keys.ToList();
+            Dictionary<int, Process> systemProcessesDictionary = new Dictionary<int, Process>();
             foreach (Process systemProcess in systemProcesses)
             {
+                systemProcessesDictionary.Add(systemProcess.Id, systemProcess);
                 if (processes.ContainsKey(systemProcess.Id))
                 {
                     processes[systemProcess.Id].RefreshProcessInfo(systemProcess);
@@ -44,14 +45,13 @@ namespace Processes_Monitor
                 {
                     processes.Add(systemProcess.Id, new ProcessInfo(systemProcess));
                 }
-                if (needDeleteProcessIdCollection.Exists(x => processes.ContainsKey(systemProcess.Id)))
-                {
-                    needDeleteProcessIdCollection.Remove(needDeleteProcessIdCollection.FindIndex(x => x == systemProcess.Id) + 1);
-                }
             }
-            foreach (int i in needDeleteProcessIdCollection)
+            foreach(var processKey in processes.Keys)
             {
-                processes.Remove(i);
+                if(!systemProcessesDictionary.ContainsKey(processKey))
+                {
+                    processes.Remove(processKey);
+                }
             }
             return processes;
         }
@@ -116,7 +116,7 @@ namespace Processes_Monitor
                 this.mName = (String)processDataObj["Name"];
                 try
                 {
-                    this.mLocalPath = (String)processDataObj["ExcutablePath"];
+                    this.mLocalPath = (String)processDataObj["ExecutablePath"];
                 }
                 catch
                 {
@@ -159,13 +159,28 @@ namespace Processes_Monitor
             private float GetCpuOccupancyRateByProcess(String processName)
             {
                 PerformanceCounter process_cpu = new PerformanceCounter("Process", "% Processor Time", processName);
-                return process_cpu.NextValue();
+                try
+                {
+                    float cpu = process_cpu.NextValue();
+                    return cpu;
+                }
+                catch
+                {
+                    return 0;
+                }
             }
 
             private float GetMemoryOccupancyRateByProcess(String processName)
             {
                 PerformanceCounter process_memory = new PerformanceCounter("Process", "Working Set - Private", processName);
-                return process_memory.NextValue();
+                try
+                {
+                    return process_memory.NextValue()/(1024*1024);
+                }
+                catch
+                {
+                    return 0;
+                }
             }
 
             private String GetProcessOwner(ManagementObject processDataObj)

@@ -112,7 +112,7 @@ namespace Processes_Monitor
             var resultOccupancyServices = new Dictionary<int, ServiceStateInfo.ServiceInfo>();
             if (this.occupancyProcesses != null && this.occupancyProcesses.Count >= 0)
             {
-                var services = ServiceStateInfo.WindowsService;
+                var services = ServiceStateInfo.WindowsServices;
                 foreach (var process in occupancyProcesses)
                     foreach (var service in services)
                     {
