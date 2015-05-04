@@ -6,6 +6,9 @@ namespace Processes_Monitor
 {
     public class ProcessControl
     {
+        /// <summary>
+        /// 使用显示Exception的方式，提高对except操作的扩展性。
+        /// </summary>
         public Exception ProcessException { get; private set; }
 
         public ProcessThreadCollection GetProcessThread(Process process)
@@ -49,23 +52,6 @@ namespace Processes_Monitor
         /// </summary>
         /// <param name="process"></param>
         /// <returns></returns>
-
-        /// <summary>
-        /// 打开process 占用文件路径的monitor，这个monitor是一个ListView控件。 这个功能为扩展功能。
-        /// </summary>
-        /// <param name="process"></param>
-        public void OpenProcessOccupancyFilePathMonitor(Process process)
-        {
-        }
-
-        /// <summary>
-        /// 打开process 占用内存的monitor，这个monitor是一个Monitor控件。这个窗口需要集成内存分析功能。
-        /// </summary>
-        /// <param name="process"></param>
-        public void OpenProcessWorkingSetMemoryMonitor(Process process)
-        {
-        }
-
         private List<String> GetProcessOccupancyFilePath(int processId)
         {
             List<String> filePathList = new List<string>();

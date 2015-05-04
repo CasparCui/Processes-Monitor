@@ -59,6 +59,7 @@
             this.reStartToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.stopToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.goToProcessToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.moveFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabControl1.SuspendLayout();
             this.tabProcess.SuspendLayout();
             this.process_ContextMenu.SuspendLayout();
@@ -160,7 +161,7 @@
             this.refreshToolStripMenuItem,
             this.goToSerivceToolStripMenuItem});
             this.process_ContextMenu.Name = "process_ContextMenu";
-            this.process_ContextMenu.Size = new System.Drawing.Size(199, 114);
+            this.process_ContextMenu.Size = new System.Drawing.Size(199, 92);
             // 
             // endTaskToolStripMenuItem
             // 
@@ -261,6 +262,8 @@
             // 
             // optionToolStripMenuItem
             // 
+            this.optionToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.moveFileToolStripMenuItem});
             this.optionToolStripMenuItem.Name = "optionToolStripMenuItem";
             this.optionToolStripMenuItem.Size = new System.Drawing.Size(56, 20);
             this.optionToolStripMenuItem.Text = "Option";
@@ -308,6 +311,13 @@
             this.goToProcessToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.goToProcessToolStripMenuItem.Text = "Go To Process";
             this.goToProcessToolStripMenuItem.Click += new System.EventHandler(this.goToProcessToolStripMenuItem_Click);
+            // 
+            // moveFileToolStripMenuItem
+            // 
+            this.moveFileToolStripMenuItem.Name = "moveFileToolStripMenuItem";
+            this.moveFileToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.moveFileToolStripMenuItem.Text = "Move File";
+            this.moveFileToolStripMenuItem.Click += new System.EventHandler(this.moveFileToolStripMenuItem_Click);
             // 
             // ProcessesMonitor
             // 
@@ -364,6 +374,7 @@
         private System.Windows.Forms.ToolStripMenuItem reStartToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem stopToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem goToProcessToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem moveFileToolStripMenuItem;
     }
 }
 

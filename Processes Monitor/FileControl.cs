@@ -44,7 +44,11 @@ namespace Processes_Monitor
                     {
                         if (process is Process)
                         {
-                            processControler.KillProcess(process);
+                            if(!processControler.KillProcess(process))
+                            {
+                                FileControlException.Add(processControler.ProcessException);
+                            }
+
                         }
                     }
                     return true;

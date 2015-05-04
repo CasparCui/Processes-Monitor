@@ -54,6 +54,12 @@
     <Compile Include="MemoryMonitor.Designer.cs">
       <DependentUpon>MemoryMonitor.cs</DependentUpon>
     </Compile>
+    <Compile Include="MoveFile.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MoveFile.Designer.cs">
+      <DependentUpon>MoveFile.cs</DependentUpon>
+    </Compile>
     <Compile Include="ProcessesMonitor.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -74,6 +80,9 @@
       <DependentUpon>MemoryMonitor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Monitor.resx" />
+    <EmbeddedResource Include="MoveFile.resx">
+      <DependentUpon>MoveFile.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="ProcessesMonitor.resx">
       <DependentUpon>ProcessesMonitor.cs</DependentUpon>
     </EmbeddedResource>
@@ -105,6 +114,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Handle.exe" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Logger\Logger.csproj">
+      <Project>{68180f08-a72f-4b72-9c38-845acdbaf547}</Project>
+      <Name>Logger</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -5,6 +5,8 @@ VisualStudioVersion = 12.0.30723.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Processes Monitor", "Processes Monitor\Processes Monitor.csproj", "{78FCA454-CD0D-4E4D-A96B-BA3B5F7DC276}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Logger", "Logger\Logger.csproj", "{68180F08-A72F-4B72-9C38-845ACDBAF547}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{78FCA454-CD0D-4E4D-A96B-BA3B5F7DC276}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{78FCA454-CD0D-4E4D-A96B-BA3B5F7DC276}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{78FCA454-CD0D-4E4D-A96B-BA3B5F7DC276}.Release|Any CPU.Build.0 = Release|Any CPU
+		{68180F08-A72F-4B72-9C38-845ACDBAF547}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{68180F08-A72F-4B72-9C38-845ACDBAF547}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{68180F08-A72F-4B72-9C38-845ACDBAF547}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{68180F08-A72F-4B72-9C38-845ACDBAF547}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

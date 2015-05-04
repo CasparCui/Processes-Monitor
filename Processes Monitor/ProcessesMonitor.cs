@@ -172,6 +172,10 @@ namespace Processes_Monitor
                     {
                         item.Remove();
                     }
+                    else
+                    {
+                        MessageBox.Show("Error", processControl.ProcessException.ToString(), MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
 
                 }
             }
@@ -239,22 +243,40 @@ namespace Processes_Monitor
         private void startToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var listViewItem = service_ListView.SelectedItems[0];
-            ServiceControl.ControlService(listViewItem.Name, ServiceControlOption.Start);
-            listViewItem.SubItems[2].Text = ServiceRunningState.Start_Pending.ToString();
+            if (ServiceControl.ControlService(listViewItem.Name, ServiceControlOption.Start))
+            {
+                listViewItem.SubItems[2].Text = ServiceRunningState.Start_Pending.ToString();
+            }
+            else
+            {
+                MessageBox.Show("Error", ServiceControl.ServiceException.ToString(), MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void reStartToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var listViewItem = service_ListView.SelectedItems[0];
-            ServiceControl.ControlService(listViewItem.Name, ServiceControlOption.Restart);
-            listViewItem.SubItems[2].Text = ServiceRunningState.Stop_Pending.ToString();
+            if (ServiceControl.ControlService(listViewItem.Name, ServiceControlOption.Restart))
+            {
+                listViewItem.SubItems[2].Text = ServiceRunningState.Stop_Pending.ToString();
+            }
+            else
+            {
+                MessageBox.Show("Error", ServiceControl.ServiceException.ToString(), MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void stopToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var listViewItem = service_ListView.SelectedItems[0];
-            ServiceControl.ControlService(listViewItem.Name, ServiceControlOption.Stop);
-            listViewItem.SubItems[2].Text = ServiceRunningState.Stop_Pending.ToString();
+            if (ServiceControl.ControlService(listViewItem.Name, ServiceControlOption.Stop))
+            {
+                listViewItem.SubItems[2].Text = ServiceRunningState.Stop_Pending.ToString();
+            }
+            else
+            {
+                MessageBox.Show("Error", ServiceControl.ServiceException.ToString(), MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void goToProcessToolStripMenuItem_Click(object sender, EventArgs e)
@@ -274,6 +296,11 @@ namespace Processes_Monitor
             var processInfo = new ProcessesStateInfo.ProcessInfo(Process.GetProcessById(Convert.ToInt32(listViewItem.Name)));
             var monitorFormWindow = new MemoryMonitor(processInfo);
             monitorFormWindow.Show();
+        }
+
+        private void moveFileToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
         }
         
 
