@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using ProcessLogger;
 
 namespace Processes_Monitor
 {
@@ -47,6 +48,7 @@ namespace Processes_Monitor
                 doubleMemory = doubleMemory * 2;
             }
             this.monitorControl1.MonitorView(Convert.ToDecimal(memory), Convert.ToDecimal(doubleMemory));
+            Logger.Debug("Process name:{0}, ID:{1}, Memory:{2}", processInfo.Name, processInfo.Id, memory.ToString("0.000MB"));
         }
 
     }

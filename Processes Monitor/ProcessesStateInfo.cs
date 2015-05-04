@@ -128,23 +128,7 @@ namespace Processes_Monitor
                     this.mLocalPath = string.Empty;
                 }
                 this.mDiscription = (String)processDataObj["Caption"];
-                try
-                {
-                    object[] ownerInfo = new object[2];
-                    uint resultNumber = (uint)processDataObj.InvokeMethod("GetOwner", ownerInfo);
-                    if (ownerInfo[0]!=null&&ownerInfo[1]!=null)
-                    {
-                        this.mUser = String.Format("{0}\\{1}", (String)ownerInfo[0], (String)ownerInfo[1]);
-                    }
-                    else
-                    {
-                        this.mUser = "SYSTEM";
-                    }
-                }
-                catch
-                {
-                    this.mUser = "SYSTEM";
-                }
+                this.mUser = GetProcessOwner(processDataObj);
                 this.mCpuOccupancyRate = GetCpuOccupancyRateByProcess(mName);
                 this.mMemoryOccupancy = GetMemoryOccupancyRateByProcess(mName);
             }

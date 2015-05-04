@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using ProcessLogger;
 
 namespace Processes_Monitor
 {
@@ -84,11 +85,12 @@ namespace Processes_Monitor
             service_ListView.Refresh();
             Thread refreshListViewThread = new Thread(() =>
             {
+                Logger.Info("Thread is started.");
                 do
                 {
                     Thread.Sleep(1500);
                 }
-                while (this.refreshListViews(process_ListView.Items, service_ListView.Items));
+                while (this.RefreshListViews(process_ListView.Items, service_ListView.Items));
 
             });
             refreshListViewThread.IsBackground = true;
@@ -96,29 +98,31 @@ namespace Processes_Monitor
             this.process_ContextMenu.Enabled = false;
         }
 
-        private bool refreshListViews(ListView.ListViewItemCollection processView, ListView.ListViewItemCollection serviceView)
+        private bool RefreshListViews(ListView.ListViewItemCollection processView, ListView.ListViewItemCollection serviceView)
         {
-            this.processes = ProcessesStateInfo.Processes;
-            this.services = ServiceStateInfo.WindowsServices;
-            lock (lockobj)
+            try
             {
-                foreach (ListViewItem item in processView)
+                this.processes = ProcessesStateInfo.Processes;
+                this.services = ServiceStateInfo.WindowsServices;
+                lock (lockobj)
                 {
-                    if (processes.ContainsKey(Convert.ToInt32(item.SubItems[1].Text/*PID*/)))
+                    foreach (ListViewItem item in processView)
                     {
-                        item.SubItems[3].Text = processes[Convert.ToInt32(item.SubItems[1].Text)].CpuOccupancyRate.ToString();
-                        item.SubItems[4].Text = processes[Convert.ToInt32(item.SubItems[1].Text)].MemoryOccupancy.ToString("#0.00") + "MB";
+                        if (processes.ContainsKey(Convert.ToInt32(item.SubItems[1].Text/*PID*/)))
+                        {
+                            item.SubItems[3].Text = processes[Convert.ToInt32(item.SubItems[1].Text)].CpuOccupancyRate.ToString();
+                            item.SubItems[4].Text = processes[Convert.ToInt32(item.SubItems[1].Text)].MemoryOccupancy.ToString("#0.00") + "MB";
+                        }
+                        else
+                        {
+                            item.Remove();
+                        }
                     }
-                    else
+                    foreach (var process in processes.Values)
                     {
-                        item.Remove();
-                    }
-                }
-                foreach (var process in processes.Values)
-                {
-                    if (!processView.ContainsKey(process.Id.ToString()))
-                    {
-                        processView.Add(new ListViewItem(new string[] 
+                        if (!processView.ContainsKey(process.Id.ToString()))
+                        {
+                            processView.Add(new ListViewItem(new string[] 
                         {
                             process.Name, 
                             process.Id.ToString(), 
@@ -127,19 +131,26 @@ namespace Processes_Monitor
                             process.MemoryOccupancy.ToString("#0.00")+"MB", 
                             process.LocalPath 
                         })
-                        {
-                            Name = process.Id.ToString(),
-                        });
+                            {
+                                Name = process.Id.ToString(),
+                            });
+                        }
                     }
-                }
-                foreach (ListViewItem item in serviceView)
-                {
-                    if (services.ContainsKey(item.SubItems[0].Text))
+                    foreach (ListViewItem item in serviceView)
                     {
-                        item.SubItems[2].Text = services[item.SubItems[0].Text].ServiceState.ToString();
+                        if (services.ContainsKey(item.SubItems[0].Text))
+                        {
+                            item.SubItems[2].Text = services[item.SubItems[0].Text].ServiceState.ToString();
+                        }
                     }
+                    return true;
                 }
-                return true;
+            }
+            catch( Exception e)
+            {
+                Logger.Error("Something error happened at RefreshListView. \nError message: {0}", e);
+                MessageBox.Show("Error", e.ToString(), MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
             }
         }
 
@@ -171,9 +182,11 @@ namespace Processes_Monitor
                     if(processControl.KillProcess(Convert.ToInt32(item.Name)))
                     {
                         item.Remove();
+                        Logger.Info("End Process finished. Process ID: {0}.", item.Name);
                     }
                     else
                     {
+                        Logger.Error("Something error happened at End PROCESS. \nError message: {0}", processControl.ProcessException);
                         MessageBox.Show("Error", processControl.ProcessException.ToString(), MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
 
@@ -202,6 +215,7 @@ namespace Processes_Monitor
                     service_ListView.SelectedItems.Clear();
                 }
             }
+            Logger.Info("Go to service finished.");
         }
 
         private void service_ListView_SelectedIndexChanged(object sender, EventArgs e)
@@ -238,6 +252,7 @@ namespace Processes_Monitor
                     this.goToSerivceToolStripMenuItem.Enabled = false;
                 }
             }
+            Logger.Info("Load service finished.");
         }
 
         private void startToolStripMenuItem_Click(object sender, EventArgs e)
@@ -246,9 +261,11 @@ namespace Processes_Monitor
             if (ServiceControl.ControlService(listViewItem.Name, ServiceControlOption.Start))
             {
                 listViewItem.SubItems[2].Text = ServiceRunningState.Start_Pending.ToString();
+                Logger.Info("Start servcie finished. Servicec Name: {0}", listViewItem.Name);
             }
             else
             {
+                Logger.Error("Start servcie error,Error :{0}", ServiceControl.ServiceException);
                 MessageBox.Show("Error", ServiceControl.ServiceException.ToString(), MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -259,9 +276,11 @@ namespace Processes_Monitor
             if (ServiceControl.ControlService(listViewItem.Name, ServiceControlOption.Restart))
             {
                 listViewItem.SubItems[2].Text = ServiceRunningState.Stop_Pending.ToString();
+                Logger.Info("Restart servcie finished. Servicec Name: {0}", listViewItem.Name);
             }
             else
             {
+                Logger.Error("Restart servcie error,Error :{0}", ServiceControl.ServiceException);
                 MessageBox.Show("Error", ServiceControl.ServiceException.ToString(), MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -272,9 +291,11 @@ namespace Processes_Monitor
             if (ServiceControl.ControlService(listViewItem.Name, ServiceControlOption.Stop))
             {
                 listViewItem.SubItems[2].Text = ServiceRunningState.Stop_Pending.ToString();
+                Logger.Info("Stop servcie finished. Servicec Name: {0}", listViewItem.Name);
             }
             else
             {
+                Logger.Error("Stop servcie error,Error :{0}", ServiceControl.ServiceException);
                 MessageBox.Show("Error", ServiceControl.ServiceException.ToString(), MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -288,6 +309,7 @@ namespace Processes_Monitor
             {
                 process_ListView.Items.Find(pID, false)[0].Selected = true;
             }
+            Logger.Info("Go to process finished.");
         }
 
         private void showMomoryMonitorToolStripMenuItem_Click(object sender, EventArgs e)
