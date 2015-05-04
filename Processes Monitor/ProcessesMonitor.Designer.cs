@@ -160,7 +160,7 @@
             this.refreshToolStripMenuItem,
             this.goToSerivceToolStripMenuItem});
             this.process_ContextMenu.Name = "process_ContextMenu";
-            this.process_ContextMenu.Size = new System.Drawing.Size(199, 92);
+            this.process_ContextMenu.Size = new System.Drawing.Size(199, 114);
             // 
             // endTaskToolStripMenuItem
             // 
@@ -174,6 +174,7 @@
             this.showMomoryMonitorToolStripMenuItem.Name = "showMomoryMonitorToolStripMenuItem";
             this.showMomoryMonitorToolStripMenuItem.Size = new System.Drawing.Size(198, 22);
             this.showMomoryMonitorToolStripMenuItem.Text = "Show Momory Monitor";
+            this.showMomoryMonitorToolStripMenuItem.Click += new System.EventHandler(this.showMomoryMonitorToolStripMenuItem_Click);
             // 
             // refreshToolStripMenuItem
             // 

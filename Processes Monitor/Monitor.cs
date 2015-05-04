@@ -65,7 +65,7 @@ namespace SerialportSample
             this.ViewGroup.Size = new System.Drawing.Size(60, 209);
             this.ViewGroup.TabIndex = 0;
             this.ViewGroup.TabStop = false;
-            this.ViewGroup.Text = "状态";
+            this.ViewGroup.Text = "Memory";
             // 
             // ViewLabel
             // 
@@ -75,7 +75,7 @@ namespace SerialportSample
             this.ViewLabel.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.ViewLabel.Size = new System.Drawing.Size(41, 12);
             this.ViewLabel.TabIndex = 1;
-            this.ViewLabel.Text = "0%";
+            this.ViewLabel.Text = "";
             this.ViewLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // ViewPicture
@@ -111,7 +111,7 @@ namespace SerialportSample
             this.LineLabel.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.LineLabel.Size = new System.Drawing.Size(221, 12);
             this.LineLabel.TabIndex = 2;
-            this.LineLabel.Text = "?/?";
+            this.LineLabel.Text = "";
             this.LineLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.LineLabel.Click += new System.EventHandler(this.LineLabel_Click);
             // 
@@ -173,20 +173,25 @@ namespace SerialportSample
         /// <param name="p_MaxValue">最大数据</param>    
         public void MonitorView( decimal p_Value, decimal p_MaxValue )
         {
-            decimal _Value = 0;
-            if ( p_Value != 0 && p_MaxValue != 0 ) _Value = p_Value / ( p_MaxValue / 100 );
-            int _ValueInt = ( int )_Value;
-
-            this.Invoke( ( MethodInvoker )delegate
+            try
             {
-                ViewPicture.Image = LoadViewImage( _Value );
-                ViewLabel.Text = _ValueInt.ToString() + "℃";
+                decimal _Value = 0;
+                if (p_Value != 0 && p_MaxValue != 0) _Value = p_Value / (p_MaxValue / 100);
+                int _ValueInt = (int)_Value;
 
-                LinePicture.Image = LoadLineImage( _Value );
+                this.Invoke((MethodInvoker)delegate
+                {
+                    ViewPicture.Image = LoadViewImage(_Value);
+                    ViewLabel.Text = string.Empty;
 
-                LineLabel.Text = MonitorName;
-                //LineLabel.Text = p_Value.ToString() + "/" + p_MaxValue.ToString();
-            } );
+                    LinePicture.Image = LoadLineImage(_Value);
+
+                    LineLabel.Text = MonitorName;
+                    LineLabel.Text = p_Value.ToString("#0.0") + "/" + p_MaxValue.ToString("#0.0");
+                });
+            }
+            catch
+            { }
         }
 
         /// <summary>

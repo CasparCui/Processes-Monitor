@@ -267,6 +267,14 @@ namespace Processes_Monitor
                 process_ListView.Items.Find(pID, false)[0].Selected = true;
             }
         }
+
+        private void showMomoryMonitorToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var listViewItem = this.process_ListView.SelectedItems[0];
+            var processInfo = new ProcessesStateInfo.ProcessInfo(Process.GetProcessById(Convert.ToInt32(listViewItem.Name)));
+            var monitorFormWindow = new MemoryMonitor(processInfo);
+            monitorFormWindow.Show();
+        }
         
 
     }
