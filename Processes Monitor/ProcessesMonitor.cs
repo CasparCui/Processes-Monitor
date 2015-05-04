@@ -93,6 +93,7 @@ namespace Processes_Monitor
             });
             refreshListViewThread.IsBackground = true;
             refreshListViewThread.Start();
+            this.process_ContextMenu.Enabled = false;
         }
 
         private bool refreshListViews(ListView.ListViewItemCollection processView, ListView.ListViewItemCollection serviceView)
@@ -141,5 +142,132 @@ namespace Processes_Monitor
                 return true;
             }
         }
+
+        private void process_ListView_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            this.process_ContextMenu.Enabled = true;
+            var listViewItems = process_ListView.SelectedItems;
+            if(listViewItems.Count==1)
+            {
+                this.goToSerivceToolStripMenuItem.Enabled = true;
+            }
+            else if(listViewItems.Count==0)
+            {
+                this.process_ContextMenu.Enabled = false;
+            }
+            else
+            {
+                this.goToSerivceToolStripMenuItem.Enabled = false;
+            }
+        }
+
+        private void endTaskToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var listViewItems = process_ListView.SelectedItems;
+            {
+                foreach(ListViewItem item in listViewItems)
+                {
+                    var processControl = new ProcessControl();
+                    if(processControl.KillProcess(Convert.ToInt32(item.Name)))
+                    {
+                        item.Remove();
+                    }
+
+                }
+            }
+        }
+
+        private void refreshToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            process_ListView.Refresh();
+        }
+
+        private void goToSerivceToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var listViewItems = process_ListView.SelectedItems;
+            var pId_String = listViewItems[0].Name;
+            this.tabControl1.SelectedTab = tabService;
+            foreach(ListViewItem item in service_ListView.Items)
+            {
+                if(!String.IsNullOrEmpty( item.SubItems[3].Text) && item.SubItems[3].Text.Equals(pId_String,StringComparison.OrdinalIgnoreCase))
+                {
+                    item.Selected = true;
+                }
+                else
+                {
+                    service_ListView.SelectedItems.Clear();
+                }
+            }
+        }
+
+        private void service_ListView_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            var listviewItems = service_ListView.SelectedItems;
+            if(listviewItems.Count!=0)
+            {
+                this.service_ContextMenu.Enabled = true;
+                var state_String = listviewItems[0].SubItems[2].Text;
+                switch(state_String)
+                {
+                    case "Running":
+                        this.startToolStripMenuItem.Enabled = false;
+                        this.reStartToolStripMenuItem.Enabled = true;
+                        this.stopToolStripMenuItem.Enabled = true;
+                        break;
+                    case "Stopped":
+                        this.startToolStripMenuItem.Enabled = true;
+                        this.reStartToolStripMenuItem.Enabled = false;
+                        this.stopToolStripMenuItem.Enabled = false;
+                        break;
+                    default:
+                        this.startToolStripMenuItem.Enabled = false;
+                        this.reStartToolStripMenuItem.Enabled = false;
+                        this.stopToolStripMenuItem.Enabled = false;
+                        break;
+                }
+                if(!String.IsNullOrEmpty(listviewItems[0].SubItems[3].Text))
+                {
+                    this.goToSerivceToolStripMenuItem.Enabled = true;
+                }
+                else
+                {
+                    this.goToSerivceToolStripMenuItem.Enabled = false;
+                }
+            }
+        }
+
+        private void startToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var listViewItem = service_ListView.SelectedItems[0];
+            ServiceControl.ControlService(listViewItem.Name, ServiceControlOption.Start);
+            listViewItem.SubItems[2].Text = ServiceRunningState.Start_Pending.ToString();
+        }
+
+        private void reStartToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var listViewItem = service_ListView.SelectedItems[0];
+            ServiceControl.ControlService(listViewItem.Name, ServiceControlOption.Restart);
+            listViewItem.SubItems[2].Text = ServiceRunningState.Stop_Pending.ToString();
+        }
+
+        private void stopToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var listViewItem = service_ListView.SelectedItems[0];
+            ServiceControl.ControlService(listViewItem.Name, ServiceControlOption.Stop);
+            listViewItem.SubItems[2].Text = ServiceRunningState.Stop_Pending.ToString();
+        }
+
+        private void goToProcessToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var listViewItem = service_ListView.SelectedItems[0];
+            var pID = listViewItem.SubItems[3].Text;
+            tabControl1.SelectedTab = tabProcess;
+            if (process_ListView.Items.ContainsKey(pID))
+            {
+                process_ListView.Items.Find(pID, false)[0].Selected = true;
+            }
+        }
+        
+
     }
 }

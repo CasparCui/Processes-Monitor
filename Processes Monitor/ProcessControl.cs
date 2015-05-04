@@ -37,6 +37,13 @@ namespace Processes_Monitor
                 return false;
             }
         }
+        public bool KillProcess(int processId)
+        {
+
+            var process = Process.GetProcessById(processId);
+            return this.KillProcess(process);
+
+        }
         /// <summary>
         /// 获取进程占用文件的路径集合 此方法需要配合handle.exe使用，handle.exe已经打包到工程中。
         /// </summary>

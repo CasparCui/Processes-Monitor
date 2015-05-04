@@ -56,7 +56,7 @@ namespace Processes_Monitor
             {
                 this.mName = (String)serviceObj["Name"];
                 this.mDescription = (String)serviceObj["Description"];
-                this.mServiceState = (ServiceRunningState)Enum.Parse(typeof(ServiceRunningState), (String)serviceObj["State"]);
+                this.mServiceState = (ServiceRunningState)Enum.Parse(typeof(ServiceRunningState), ((String)serviceObj["State"]).Replace(' ','_'));
                 if (serviceObj["ProcessId"] != null)
                 {
                     this.mProcessId = (uint)serviceObj["ProcessId"];

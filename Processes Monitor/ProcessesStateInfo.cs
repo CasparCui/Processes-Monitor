@@ -34,6 +34,7 @@ namespace Processes_Monitor
             }
             var systemProcesses = Process.GetProcesses();
             Dictionary<int, Process> systemProcessesDictionary = new Dictionary<int, Process>();
+            List<int> needDeleteKey = new List<int>();
             foreach (Process systemProcess in systemProcesses)
             {
                 systemProcessesDictionary.Add(systemProcess.Id, systemProcess);
@@ -45,6 +46,17 @@ namespace Processes_Monitor
                 {
                     processes.Add(systemProcess.Id, new ProcessInfo(systemProcess));
                 }
+            }
+            foreach(var process in processes)
+            {
+                if(!systemProcessesDictionary.ContainsKey(process.Key))
+                {
+                    needDeleteKey.Add(process.Key);
+                }
+            }
+            foreach(var key in needDeleteKey)
+            {
+                processes.Remove(key);
             }
             return processes;
         }

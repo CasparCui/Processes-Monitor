@@ -18,7 +18,11 @@ namespace Processes_Monitor
         static public Exception ServiceException { get; private set; }
         static public bool ControlService(Processes_Monitor.ServiceStateInfo.ServiceInfo serviceInfo, ServiceControlOption controlOption)
         {
-            Controller = new ServiceController(serviceInfo.Name);
+            return ControlService(serviceInfo.Name, controlOption);
+        }
+        static public bool ControlService(String name, ServiceControlOption controlOption)
+        {
+            Controller = new ServiceController(name);
             bool result = false;
             Thread serviceControlThread = new Thread(() =>
             {
@@ -46,7 +50,6 @@ namespace Processes_Monitor
             serviceControlThread.Abort();
             return result;
         }
-
         static private bool RestartService()
         {
             if (StopService())
@@ -73,7 +76,11 @@ namespace Processes_Monitor
                     ServiceException = e;
                     return false;
                 }
-                do { Thread.Sleep(333); }
+                do 
+                {
+                    Controller.Refresh();
+                    Thread.Sleep(333); 
+                }
                 while (Controller.Status != ServiceControllerStatus.Running);
                 return true;
             }
@@ -94,7 +101,11 @@ namespace Processes_Monitor
                     ServiceException = e;
                     return false;
                 }
-                do { Thread.Sleep(333); }
+                do
+                {
+                    Controller.Refresh();
+                    Thread.Sleep(333);
+                }
                 while (Controller.Status != ServiceControllerStatus.Stopped);
                 return true;
             }

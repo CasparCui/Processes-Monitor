@@ -11,8 +11,6 @@ namespace Processes_Monitor
         [STAThread]
         private static void Main()
         {
-            var process = ProcessesMonitorConfig.DestinationFolderPath;
-            //process.GetProcessOccupancyFilePath(948);
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new ProcessesMonitor());
