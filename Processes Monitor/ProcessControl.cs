@@ -52,7 +52,7 @@ namespace Processes_Monitor
         /// </summary>
         /// <param name="process"></param>
         /// <returns></returns>
-        private List<String> GetProcessOccupancyFilePath(int processId)
+        public List<String> GetProcessOccupancyFilePath(int processId)
         {
             List<String> filePathList = new List<string>();
             Process cmd = new Process(); //获得系统信息，使用的是 handle.exe 这个控制台程序

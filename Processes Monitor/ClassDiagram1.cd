@@ -1,0 +1,52 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Processes_Monitor.ServiceStateInfo">
+    <Position X="3.75" Y="1.75" Width="4" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+      <Compartment Name="Nested Types" Collapsed="false" />
+    </Compartments>
+    <NestedTypes>
+      <Class Name="Processes_Monitor.ServiceStateInfo.ServiceInfo">
+        <Compartments>
+          <Compartment Name="Fields" Collapsed="true" />
+        </Compartments>
+        <TypeIdentifier>
+          <NewMemberFileName>ServiceStateInfo.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAAAAAABAAAIAAAECAAAAACAAAAAAAAABAAAAAAAAAA=</HashCode>
+      <FileName>ServiceStateInfo.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Processes_Monitor.FileCollection">
+    <Position X="9" Y="1.5" Width="3.5" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAAAAAMQAAAAAAAAAAAAABBAAAAAAAAgAAAAAAAAGIA=</HashCode>
+      <FileName>FileCollection.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Processes_Monitor.FileControl">
+    <Position X="9.25" Y="5.25" Width="3.5" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAgAAAAAAEAAAAAIgAACgAQAgAAAAAAAAAAAA=</HashCode>
+      <FileName>FileControl.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Enum Name="Processes_Monitor.ServiceRunningState">
+    <Position X="0.75" Y="1.75" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AAAgAAAAABIAAAAAAAAAAEAAAQAABAAIAAAAAAAAABA=</HashCode>
+      <FileName>ServiceStateInfo.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9.75" />
+</ClassDiagram>

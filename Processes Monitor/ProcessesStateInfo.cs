@@ -79,7 +79,7 @@ namespace Processes_Monitor
             return processes;
         }
 
-        public class ProcessInfo
+        public class ProcessInfo:IDisposable
         {
             private float mCpuOccupancyRate;
             private String mDiscription;
@@ -100,7 +100,7 @@ namespace Processes_Monitor
                 this.Process = process;
                 this.mId = process.Id;
                 this.mName = process.ProcessName;
-                searcher = new ManagementObjectSearcher("Select * From Win32_Process Where ProcessID = '" + this.mId + "'");
+                searcher = new ManagementObjectSearcher(@"Select * From Win32_Process Where ProcessID = '" + this.mId + "'");
                 processDataCache = searcher.Get();
                 foreach (ManagementObject processDataObj in processDataCache)
                 {
@@ -110,10 +110,11 @@ namespace Processes_Monitor
                 }
                 this.mCpuOccupancyRate = GetCpuOccupancyRateByProcess(mName);
                 this.mMemoryOccupancy = GetMemoryOccupancyRateByProcess(mName);
+                this.Dispose();
             }
 
             /// <summary>
-            /// 2015-04-16 添加了新的构造方法，此方法直接load WMI数据只有一次，执行效率大幅提升。同时原有构造方法保留，专用于更新单个process。
+            /// 添加了新的构造方法，此方法直接load WMI数据只有一次，执行效率大幅提升。同时原有构造方法保留，专用于更新单个process。
             /// </summary>
             /// <param name="processDataObj"></param>
             public ProcessInfo(ManagementObject processDataObj)
@@ -132,6 +133,7 @@ namespace Processes_Monitor
                 this.mUser = GetProcessOwner(processDataObj);
                 this.mCpuOccupancyRate = GetCpuOccupancyRateByProcess(mName);
                 this.mMemoryOccupancy = GetMemoryOccupancyRateByProcess(mName);
+                this.Dispose();
             }
 
             public float CpuOccupancyRate
@@ -197,7 +199,7 @@ namespace Processes_Monitor
                 {
                     object[] ownerInfo = new object[2];
                     uint resultNumber = (uint)processDataObj.InvokeMethod("GetOwner", ownerInfo);
-                    if (resultNumber != 0)
+                    if (ownerInfo[0]!=null&&ownerInfo[1]!=null)
                     {
                         return String.Format("{0}\\{1}", (String)ownerInfo[0], (String)ownerInfo[1]);
                     }
@@ -217,6 +219,16 @@ namespace Processes_Monitor
                 this.MemoryOccupancy = this.GetMemoryOccupancyRateByProcess(this.Name);
                 return this.MemoryOccupancy;
             }
+
+            #region IDisposable Members
+
+            public void Dispose()
+            {
+                if(this.searcher != null)
+                this.searcher.Dispose();
+            }
+
+            #endregion
         }
     }
 }
