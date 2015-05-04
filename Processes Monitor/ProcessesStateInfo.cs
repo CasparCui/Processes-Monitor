@@ -46,13 +46,6 @@ namespace Processes_Monitor
                     processes.Add(systemProcess.Id, new ProcessInfo(systemProcess));
                 }
             }
-            foreach(var processKey in processes.Keys)
-            {
-                if(!systemProcessesDictionary.ContainsKey(processKey))
-                {
-                    processes.Remove(processKey);
-                }
-            }
             return processes;
         }
 
@@ -66,7 +59,7 @@ namespace Processes_Monitor
         {
             processes = new Dictionary<int, ProcessInfo>();
 
-            var searcher = new ManagementObjectSearcher("Select ProcessId,Name, ExecutablePath,Caption From Win32_Process");
+            var searcher = new ManagementObjectSearcher("Select * From Win32_Process");
             var processDataCache = searcher.Get();
             foreach (ManagementObject processObj in processDataCache)
             {
@@ -94,7 +87,7 @@ namespace Processes_Monitor
                 this.Process = process;
                 this.mId = process.Id;
                 this.mName = process.ProcessName;
-                searcher = new ManagementObjectSearcher("Select ExecutablePath,Caption From Win32_Process Where ProcessID = '" + this.mId + "'");
+                searcher = new ManagementObjectSearcher("Select * From Win32_Process Where ProcessID = '" + this.mId + "'");
                 processDataCache = searcher.Get();
                 foreach (ManagementObject processDataObj in processDataCache)
                 {
@@ -123,7 +116,23 @@ namespace Processes_Monitor
                     this.mLocalPath = string.Empty;
                 }
                 this.mDiscription = (String)processDataObj["Caption"];
-                this.mUser = GetProcessOwner(processDataObj);
+                try
+                {
+                    object[] ownerInfo = new object[2];
+                    uint resultNumber = (uint)processDataObj.InvokeMethod("GetOwner", ownerInfo);
+                    if (ownerInfo[0]!=null&&ownerInfo[1]!=null)
+                    {
+                        this.mUser = String.Format("{0}\\{1}", (String)ownerInfo[0], (String)ownerInfo[1]);
+                    }
+                    else
+                    {
+                        this.mUser = "SYSTEM";
+                    }
+                }
+                catch
+                {
+                    this.mUser = "SYSTEM";
+                }
                 this.mCpuOccupancyRate = GetCpuOccupancyRateByProcess(mName);
                 this.mMemoryOccupancy = GetMemoryOccupancyRateByProcess(mName);
             }

@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabProcess = new System.Windows.Forms.TabPage();
             this.process_ListView = new System.Windows.Forms.ListView();
@@ -48,10 +49,16 @@
             this.sStatus = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.sPid = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.pEndTask_b = new System.Windows.Forms.Button();
+            this.process_ContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.endTaskToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.showMomoryMonitorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.refreshToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.goToSerivceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabControl1.SuspendLayout();
             this.tabProcess.SuspendLayout();
             this.tabService.SuspendLayout();
             this.menuStrip1.SuspendLayout();
+            this.process_ContextMenu.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -92,6 +99,7 @@
             this.pCPU,
             this.pMemory,
             this.pLocalPath});
+            this.process_ListView.ContextMenuStrip = this.process_ContextMenu;
             this.process_ListView.FullRowSelect = true;
             this.process_ListView.HoverSelection = true;
             this.process_ListView.Location = new System.Drawing.Point(0, 0);
@@ -215,6 +223,40 @@
             this.pEndTask_b.Text = "End Task";
             this.pEndTask_b.UseVisualStyleBackColor = true;
             // 
+            // process_ContextMenu
+            // 
+            this.process_ContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.endTaskToolStripMenuItem,
+            this.showMomoryMonitorToolStripMenuItem,
+            this.refreshToolStripMenuItem,
+            this.goToSerivceToolStripMenuItem});
+            this.process_ContextMenu.Name = "process_ContextMenu";
+            this.process_ContextMenu.Size = new System.Drawing.Size(199, 92);
+            // 
+            // endTaskToolStripMenuItem
+            // 
+            this.endTaskToolStripMenuItem.Name = "endTaskToolStripMenuItem";
+            this.endTaskToolStripMenuItem.Size = new System.Drawing.Size(198, 22);
+            this.endTaskToolStripMenuItem.Text = "End Task";
+            // 
+            // showMomoryMonitorToolStripMenuItem
+            // 
+            this.showMomoryMonitorToolStripMenuItem.Name = "showMomoryMonitorToolStripMenuItem";
+            this.showMomoryMonitorToolStripMenuItem.Size = new System.Drawing.Size(198, 22);
+            this.showMomoryMonitorToolStripMenuItem.Text = "Show Momory Monitor";
+            // 
+            // refreshToolStripMenuItem
+            // 
+            this.refreshToolStripMenuItem.Name = "refreshToolStripMenuItem";
+            this.refreshToolStripMenuItem.Size = new System.Drawing.Size(198, 22);
+            this.refreshToolStripMenuItem.Text = "Refresh";
+            // 
+            // goToSerivceToolStripMenuItem
+            // 
+            this.goToSerivceToolStripMenuItem.Name = "goToSerivceToolStripMenuItem";
+            this.goToSerivceToolStripMenuItem.Size = new System.Drawing.Size(198, 22);
+            this.goToSerivceToolStripMenuItem.Text = "Go to Serivce";
+            // 
             // ProcessesMonitor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -231,6 +273,7 @@
             this.tabService.ResumeLayout(false);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
+            this.process_ContextMenu.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -258,6 +301,11 @@
         private System.Windows.Forms.ColumnHeader sStatus;
         private System.Windows.Forms.ColumnHeader sPid;
         private System.Windows.Forms.Button pEndTask_b;
+        private System.Windows.Forms.ContextMenuStrip process_ContextMenu;
+        private System.Windows.Forms.ToolStripMenuItem endTaskToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem showMomoryMonitorToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem refreshToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem goToSerivceToolStripMenuItem;
     }
 }
 
