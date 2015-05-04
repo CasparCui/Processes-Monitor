@@ -65,6 +65,9 @@
     <Compile Include="ServiceControl.cs" />
     <Compile Include="ServiceStateInfo.cs" />
     <EmbeddedResource Include="Monitor.resx" />
+    <EmbeddedResource Include="ProcessesMonitor.resx">
+      <DependentUpon>ProcessesMonitor.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
