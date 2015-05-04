@@ -229,3 +229,5 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+*.uml
+ModelingProject1/ModelDefinition/ModelingProject1.uml
